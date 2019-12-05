@@ -51,6 +51,5 @@ router.get('/auth/github/getUserInfo', jwtAuth({secret}), async (ctx) => {
         data: userinfo.data
     }
 })
-console.log(accessTokens);
 app.use(router.routes())
 app.listen(7001);
