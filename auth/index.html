@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>github登录</title>
+    <script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.js"></script>
+</head>
+
+<body>
+    <button onclick='authGithub()'>github登录</button>
+    <script>
+        axios.interceptors.request.use(function (config) {
+            let token = localStorage.getItem('token');
+            if (token) {
+                config.headers.Authorization = "Bearer " + token;
+            }
+            return config;
+        }, (error) => {
+            // 对请求错误做些什么
+            return Promise.reject(error);
+        });
+        function authGithub() {
+            window.open('/auth/github/login', "_blank");
+            const timer = setInterval(() => {
+                if (localStorage.getItem('authSuccess')) {
+                    clearInterval(timer);
+                    localStorage.removeItem('authSuccess');
+                    getUser();
+                }
+            })
+        }
+        async function getUser() {
+            const res = await axios.get('/auth/github/getUserInfo')
+            let userInfo = res.data;
+            console.log(userInfo);
+        }
+    </script>
+</body>
+
+</html>
