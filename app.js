@@ -18,11 +18,10 @@ const SESS_CONFIG = {
         client
     })
 }
-
 app.use(session(SESS_CONFIG, app));
 app.use(async (ctx, next) => {
     const keys = await client.keys('*');
-    keys.forEach(async key => console.log(key, await client.get(key)));
+    keys.forEach(async key => console.log(key,await client.get(key)));
     await next();
 })
 app.use(ctx => {
@@ -31,4 +30,6 @@ app.use(ctx => {
     ctx.session.count = ++n;
     ctx.body = '第' + n + '次访问'
 })
+
+
 app.listen(3000);
